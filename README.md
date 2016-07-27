@@ -1,6 +1,6 @@
-# logback-riemann-appender  [![Build Status](https://travis-ci.org/walmartlabs/logback-riemann-appender.svg?branch=master)](https://travis-ci.org/walmartlabs/logback-riemann-appender)
+# logback-riemann-appender  [![Build Status](https://travis-ci.org/gorillalabs/logback-riemann-appender.svg?branch=master)](https://travis-ci.org/gorillalabs/logback-riemann-appender)
 
-Forked from: https://github.com/kyleburton/logback-riemann-appender
+Forked from: https://github.com/walmartlabs/logback-riemann-appender
 
 ## Logback appender for [Riemann](http://riemann.io/)
 
