@@ -1,5 +1,13 @@
 # Release Notes
 
+## v0.3.0 - July 27st, 2016
+
+....
+
+
+
+# Release Notes
+
 ## v0.2.0 - July 21st, 2016
 
 - [#2](https://github.com/walmartlabs/logback-riemann-appender/pull/2) - Allow configuration via system property ([@dbriones](https://github.com/dbriones))
