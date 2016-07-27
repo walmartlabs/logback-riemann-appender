@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- For assistance related to logback-translator or configuration  -->
+<!-- files in general, please contact the logback user mailing list -->
+<!-- at http://www.qos.ch/mailman/listinfo/logback-user             -->
+<!--                                                                -->
+<!-- For professional support please see                            -->
+<!--    http://www.qos.ch/shop/products/professionalSupport         -->
+<!--                                                                -->
+<configuration scan="true" scanPeriod="1 seconds" debug="true">
+  <appender name="A1" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>[%-5p]@%d %c - %m%n</pattern>
+    </encoder>
+  </appender>
+  <appender name="R1" class="com.walmartlabs.logback.RiemannAppender">
+    <ServiceName>Test Service</ServiceName>
+    <RiemannHostname>127.0.0.1</RiemannHostname>
+    <RiemannPort>5555</RiemannPort>
+    <Hostname>graphene</Hostname>
+    <customAttributes>application:test-service,datacenter:us-sw</customAttributes>
+    <!--Ships only events at this level or *higher* to Riemann. Default is ERROR-->
+    <riemannLogLevel>WARN</riemannLogLevel>
+    <!--<Debug>true</Debug>-->
+  </appender>
+  <logger name="com.netflix.hystrix.strategy.properties.HystrixPropertiesChainedArchaiusProperty" level="WARN"/>
+  <root level="DEBUG">
+    <appender-ref ref="A1"/>
+    <appender-ref ref="R1"/>
+  </root>
+</configuration>
