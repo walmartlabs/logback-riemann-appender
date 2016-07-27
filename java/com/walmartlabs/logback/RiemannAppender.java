@@ -185,6 +185,8 @@ public class RiemannAppender<E> extends AppenderBase<E> {
   private EventDSL createRiemannEvent(ILoggingEvent logEvent) {
     EventDSL event = riemannClient.event()
                                   .host(hostname)
+                                  .service(serviceName)
+                                  .state(resolveState(logEvent))
 	                          // timestamp is expressed in millis,
 	                          // `time` is expressed in seconds
                                   .time(logEvent.getTimeStamp() / 1000)
@@ -275,5 +277,15 @@ public class RiemannAppender<E> extends AppenderBase<E> {
    */
   public void setDebug(boolean b) {
     debug = b;
+  }
+
+  /**
+   * Use Logging Event-Level as state value.
+   *
+   * @param logEvent
+   * @return
+     */
+  public String resolveState(ILoggingEvent logEvent){
+    return logEvent.getLevel().toString().toLowerCase();
   }
 }
