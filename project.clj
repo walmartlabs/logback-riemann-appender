@@ -1,4 +1,4 @@
-(defproject com.walmartlabs/logback-riemann-appender "0.3.0"
+(defproject gorillalabs/logback-riemann-appender "0.3.0"
   :description "Logback Appender that sends events to Riemann"
   :url "https://github.com/gorillalabs/logback-riemann-appender"
   :license {:name "Eclipse Public License"

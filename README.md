@@ -26,7 +26,7 @@ to your maven repository like so:
 See `resources/logback.xml` for a full example configuration.
 
     <configuration scan="true">
-      <appender name="R1" class="com.walmartlabs.logback.RiemannAppender">
+      <appender name="R1" class="org.gorillalabs.logback.RiemannAppender">
         <serviceName>Test Service</serviceName>
         <riemannHostname>127.0.0.1</riemannHostname>
         <riemannPort>5555</riemannPort>

@@ -1,5 +1,5 @@
 (ns user
-  (:import (com.walmartlabs.logback RiemannAppender)
+  (:import (org.gorillalabs.logback RiemannAppender)
            (org.slf4j MarkerFactory LoggerFactory)
            (ch.qos.logback.classic.spi LoggingEvent)
            (ch.qos.logback.classic Level)))
