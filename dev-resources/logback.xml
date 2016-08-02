@@ -13,7 +13,7 @@
       <pattern>[%-5p]@%d %c - %m%n</pattern>
     </encoder>
   </appender>
-  <appender name="R1" class="com.walmartlabs.logback.RiemannAppender">
+  <appender name="R1" class="org.gorillalabs.logback.RiemannAppender">
     <ServiceName>Test Service</ServiceName>
     <RiemannHostname>127.0.0.1</RiemannHostname>
     <RiemannPort>5555</RiemannPort>
