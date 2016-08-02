@@ -1,5 +1,5 @@
 # Release Notes
 
-## v0.3.1 - July 28st, 2016
+## v0.3.1a - August 2nd, 2016
 
-- [#3](https://github.com/gorillalabs/logback-riemann-appender/pull/3) - fix package names
+- [#4](https://github.com/gorillalabs/logback-riemann-appender/pull/4) - fix remove logback.xml from resources (avoid multiple logback.xml in projects)
