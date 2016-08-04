@@ -3,7 +3,7 @@
   :url "https://github.com/gorillalabs/logback-riemann-appender"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
-  :java-source-paths ["java"]
+  :java-source-paths ["src"]
   :javac-options     ["-target" "1.6" "-source" "1.6" "-Xlint:-options"]
   :junit ["test/java"]
   :plugins [[lein-junit "1.1.8"]
