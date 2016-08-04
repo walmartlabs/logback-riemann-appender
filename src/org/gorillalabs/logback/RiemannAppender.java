@@ -5,9 +5,10 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.classic.spi.IThrowableProxy;
 import ch.qos.logback.classic.spi.StackTraceElementProxy;
 import ch.qos.logback.core.AppenderBase;
-import com.aphyr.riemann.client.EventDSL;
-import com.aphyr.riemann.client.RiemannClient;
-import com.aphyr.riemann.client.SimpleUdpTransport;
+import io.riemann.riemann.client.EventDSL;
+import io.riemann.riemann.client.RiemannClient;
+import io.riemann.riemann.client.SimpleUdpTransport;
+
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -83,11 +84,7 @@ public class RiemannAppender<E> extends AppenderBase<E> {
       printError("%s.stop()", this);
     }
     if (riemannClient != null) {
-      try {
-        riemannClient.disconnect();
-      } catch (IOException ex) {
-        // do nothing, it's ok
-      }
+        riemannClient.close();
     }
     super.stop();
   }

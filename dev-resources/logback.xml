@@ -14,13 +14,13 @@
     </encoder>
   </appender>
   <appender name="R1" class="org.gorillalabs.logback.RiemannAppender">
-    <ServiceName>Test Service</ServiceName>
+    <ServiceName>Test-Service</ServiceName>
     <RiemannHostname>127.0.0.1</RiemannHostname>
     <RiemannPort>5555</RiemannPort>
-    <Hostname>graphene</Hostname>
+    <Hostname>Test-Host</Hostname>
     <customAttributes>application:test-service,datacenter:us-sw</customAttributes>
     <!--Ships only events at this level or *higher* to Riemann. Default is ERROR-->
-    <riemannLogLevel>WARN</riemannLogLevel>
+    <riemannLogLevel>debug</riemannLogLevel>
     <!--<Debug>true</Debug>-->
   </appender>
   <logger name="com.netflix.hystrix.strategy.properties.HystrixPropertiesChainedArchaiusProperty" level="WARN"/>
