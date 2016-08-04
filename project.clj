@@ -4,7 +4,7 @@
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :java-source-paths ["src"]
-  :javac-options     ["-target" "1.6" "-source" "1.6" "-Xlint:-options"]
+  :javac-options     ["-target" "1.7" "-source" "1.7" "-Xlint:-options"]
   :junit ["test/java"]
   :plugins [[lein-junit "1.1.8"]
             [lein-swank                "1.4.5"]]
