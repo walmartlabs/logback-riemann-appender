@@ -1,4 +1,4 @@
-(defproject gorillalabs/logback-riemann-appender "0.3.3"
+(defproject gorillalabs/logback-riemann-appender "0.3.4-SNAPSHOT"
   :description "Logback Appender that sends events to Riemann"
   :url "https://github.com/gorillalabs/logback-riemann-appender"
   :license {:name "Eclipse Public License"
@@ -16,7 +16,7 @@
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [io.riemann/riemann-java-client "0.4.2"]
                  [metrics-clojure "2.6.1"]
-                 [ch.qos.logback/logback-classic "1.1.3"]
+                 [ch.qos.logback/logback-classic "1.1.7"]
                  [org.clojure/tools.logging "0.3.1"]]
   :signing {:gpg-key "mail@jenslehnhoff.de"}
   :aliases {"test" ["do", "jar," "test"]}
