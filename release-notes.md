@@ -1,21 +1,31 @@
 # Release Notes
 
-## v0.2.0 - July 21st, 2016
 
-- [#2](https://github.com/walmartlabs/logback-riemann-appender/pull/2) - Allow configuration via system property ([@dbriones](https://github.com/dbriones))
-- [#1](https://github.com/walmartlabs/logback-riemann-appender/pull/1) - 109827790 reimann logback appender tcp support ([@hlship](https://github.com/hlship))
+## v0.3.4 - August 5nd, 2016
 
-The RiemannAdapter can now be configured to use TCP, with the new `tcp` property.
-The default (for now) is to continue using UDP.
+- [#6](https://github.com/gorillalabs/logback-riemann-appender/pull/6) - update ch.qos.logback/logback-classic from version 1.1.3 to 1.1.7
 
-Incompatible changes:
 
-Some properties of RiemannAdapter have changed from string to an appropriate type
-(int or boolean);
 
-- [80bd900](https://github.com/walmartlabs/logback-riemann-appender/commit/80bd9003e79ad48ae23c946f614aae19276f6ef7) - Revert project version to 0.1.5 in advance of release (Dante Briones)
-- [2a54605](https://github.com/walmartlabs/logback-riemann-appender/commit/2a54605a2d17e5f34b1174268ef0079531c9b8c5) - Log the contents of the MDC in debug mode. (Dante Briones)
-- [29e3588](https://github.com/walmartlabs/logback-riemann-appender/commit/29e358802d7b01c526ef9b015b8419db190ebd2f) - Revert `riemann-java-client` to 0.2.8 (Dante Briones)
+## v0.3.3 - August 4nd, 2016
 
-Pivotal issues closed:
-- [109827790](https://www.pivotaltracker.com/story/show/109827790) - Add TCP support to `logback-riemann-appender`
+- [#5](https://github.com/gorillalabs/logback-riemann-appender/pull/5) - upgrade Rieman Client from [com.aphyr/riemann-java-client "0.2.8"] to [io.riemann/riemann-java-client "0.4.2"]
+
+
+
+## v0.3.2 - August 2nd, 2016
+
+- [#4](https://github.com/gorillalabs/logback-riemann-appender/pull/4) - fix remove logback.xml from resources (avoid multiple logback.xml in projects)
+
+
+
+## v0.3.1 - July 28st, 2016
+
+- [#3](https://github.com/gorillalabs/logback-riemann-appender/pull/3) - fix package names
+
+
+
+## v0.3.0 - July 28st, 2016
+
+- [#2](https://github.com/gorillalabs/logback-riemann-appender/pull/2) - add junit tests
+- [#1](https://github.com/gorillalabs/logback-riemann-appender/pull/1) - 0ea3177 add missing service name and event state

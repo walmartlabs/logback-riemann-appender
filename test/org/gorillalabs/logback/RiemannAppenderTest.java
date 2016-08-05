@@ -1,4 +1,4 @@
-package com.walmartlabs.logback;
+package org.gorillalabs.logback;
 
 
 import ch.qos.logback.classic.Level;
@@ -67,6 +67,20 @@ public class RiemannAppenderTest {
   }
 
   @Test
+  public void serviceShouldDefault() throws Exception {
+    RiemannAppender<ILoggingEvent> appender = new RiemannAppender<ILoggingEvent>();
+    assertThat(appender.toString(), containsString("serviceName=*no-service-name*"));
+  }
+
+  @Test
+  public void serviceName() throws Exception {
+    String serviceName = UUID.randomUUID().toString();
+    RiemannAppender<ILoggingEvent> appender = new RiemannAppender<ILoggingEvent>();
+    appender.setServiceName(serviceName);
+    assertThat(appender.toString(), containsString("serviceName=" + serviceName));
+  }
+
+  @Test
   public void hostnameShouldBeOverridableViaSystemProperty() throws Exception {
     String hostname = UUID.randomUUID().toString();
     System.setProperty("hostname", hostname);
@@ -114,5 +128,9 @@ public class RiemannAppenderTest {
 
   private static class TestInfoEvent extends LoggingEvent {
     public Level getLevel() { return Level.INFO; }
+  }
+
+  private static class TestDebugEvent extends LoggingEvent {
+    public Level getLevel() { return Level.DEBUG; }
   }
 }
