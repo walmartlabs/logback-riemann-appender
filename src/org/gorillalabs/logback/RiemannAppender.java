@@ -1,13 +1,14 @@
-package com.walmartlabs.logback;
+package org.gorillalabs.logback;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.classic.spi.IThrowableProxy;
 import ch.qos.logback.classic.spi.StackTraceElementProxy;
 import ch.qos.logback.core.AppenderBase;
-import com.aphyr.riemann.client.EventDSL;
-import com.aphyr.riemann.client.RiemannClient;
-import com.aphyr.riemann.client.SimpleUdpTransport;
+import io.riemann.riemann.client.EventDSL;
+import io.riemann.riemann.client.RiemannClient;
+import io.riemann.riemann.client.SimpleUdpTransport;
+
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -83,11 +84,7 @@ public class RiemannAppender<E> extends AppenderBase<E> {
       printError("%s.stop()", this);
     }
     if (riemannClient != null) {
-      try {
-        riemannClient.disconnect();
-      } catch (IOException ex) {
-        // do nothing, it's ok
-      }
+        riemannClient.close();
     }
     super.stop();
   }
@@ -185,6 +182,8 @@ public class RiemannAppender<E> extends AppenderBase<E> {
   private EventDSL createRiemannEvent(ILoggingEvent logEvent) {
     EventDSL event = riemannClient.event()
                                   .host(hostname)
+                                  .service(serviceName)
+                                  .state(resolveState(logEvent))
 	                          // timestamp is expressed in millis,
 	                          // `time` is expressed in seconds
                                   .time(logEvent.getTimeStamp() / 1000)
@@ -275,5 +274,15 @@ public class RiemannAppender<E> extends AppenderBase<E> {
    */
   public void setDebug(boolean b) {
     debug = b;
+  }
+
+  /**
+   * Use Logging Event-Level as state value.
+   *
+   * @param logEvent
+   * @return
+     */
+  public String resolveState(ILoggingEvent logEvent){
+    return logEvent.getLevel().toString().toLowerCase();
   }
 }
