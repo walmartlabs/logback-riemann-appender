@@ -7,7 +7,6 @@ import ch.qos.logback.classic.spi.StackTraceElementProxy;
 import ch.qos.logback.core.AppenderBase;
 import com.aphyr.riemann.Proto;
 import com.aphyr.riemann.client.EventDSL;
-import com.aphyr.riemann.client.IPromise;
 import com.aphyr.riemann.client.RiemannClient;
 import com.aphyr.riemann.client.SimpleUdpTransport;
 
@@ -30,6 +29,11 @@ public class RiemannAppender<E> extends AppenderBase<E> {
   private String hostname = determineHostname();
   private Map<String, String> customAttributes = new HashMap<String, String>();
   private boolean tcp = false;
+
+  /**
+   * The maximum number of attempts to send a message to the Riemann server.
+   */
+  private final static int MAX_ATTEMPTS = 2;
 
   public static AtomicLong timesCalled = new AtomicLong(0);
 
@@ -129,8 +133,13 @@ public class RiemannAppender<E> extends AppenderBase<E> {
     return logEvent.getLevel().isGreaterOrEqual(riemannLogLevel);
   }
 
-  protected final static int MAX_ATTEMPTS = 2;
-
+  /**
+   * When appending a Logback event, this code will attempt to send an event to the Riemann service.
+   * We give it MAX_ATTEMPTS tries; currently that's hard-coded to 2 attempts.  On attempts after the first,
+   * we start with a reconnect of the Riemann client.
+   *
+   * An attempt is only succesful if the acknowledgement message from Rienmann is ok.
+   */
   protected synchronized void append(E event) {
     timesCalled.incrementAndGet();
     ILoggingEvent logEvent = (ILoggingEvent) event;
@@ -165,6 +174,7 @@ public class RiemannAppender<E> extends AppenderBase<E> {
               printError("%s.append(logEvent): sent to riemann %s:%s", className, riemannHostname, riemannPort);
             }
 
+            // Ok to break out of the retry loop once successful.
             break;
 
           } catch (Exception ex) {
