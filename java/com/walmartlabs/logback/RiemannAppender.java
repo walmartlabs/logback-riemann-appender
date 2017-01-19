@@ -191,8 +191,8 @@ public class RiemannAppender<E> extends AppenderBase<E> {
         } // retry loop
       } catch (IOException ex) {
         // Failure after retries exhausted:
+        printError("%s.append: Error during append(): %s", className, ex);
         if (debug) {
-          printError("%s.append: Error during append(): %s", className, ex);
           ex.printStackTrace(System.err);
         }
       }
