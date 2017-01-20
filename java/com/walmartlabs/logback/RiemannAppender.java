@@ -5,6 +5,7 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.classic.spi.IThrowableProxy;
 import ch.qos.logback.classic.spi.StackTraceElementProxy;
 import ch.qos.logback.core.AppenderBase;
+import com.aphyr.riemann.Proto;
 import com.aphyr.riemann.client.EventDSL;
 import com.aphyr.riemann.client.RiemannClient;
 import com.aphyr.riemann.client.SimpleUdpTransport;
@@ -83,11 +84,8 @@ public class RiemannAppender<E> extends AppenderBase<E> {
       printError("%s.stop()", this);
     }
     if (riemannClient != null) {
-      try {
-        riemannClient.disconnect();
-      } catch (IOException ex) {
-        // do nothing, it's ok
-      }
+
+      riemannClient.close();
     }
     super.stop();
   }
@@ -130,6 +128,17 @@ public class RiemannAppender<E> extends AppenderBase<E> {
     return logEvent.getLevel().isGreaterOrEqual(riemannLogLevel);
   }
 
+  /**
+   * Sends the event and waits for the ack. If not ok, throws an IOException with the server-reported error.
+   */
+  private final void send(EventDSL event) throws IOException {
+    Proto.Msg msg = event.send().deref();
+
+    if (!msg.getOk()) {
+      throw new IOException(msg.getError());
+    }
+  }
+
   protected synchronized void append(E event) {
     timesCalled.incrementAndGet();
     ILoggingEvent logEvent = (ILoggingEvent) event;
@@ -141,29 +150,29 @@ public class RiemannAppender<E> extends AppenderBase<E> {
     if (isMinimumLevel(logEvent)) {
       EventDSL rEvent = createRiemannEvent(logEvent);
       try {
-        try {
-          if (debug) {
-            printError("%s.append: sending riemann event: %s", className, rEvent);
-          }
-          rEvent.send();
-          if (debug) {
-            printError("%s.append(logEvent): sent to riemann %s:%s", className, riemannHostname, riemannPort);
-          }
-        } catch (Exception ex) {
-          if (debug) {
-            printError("%s: Error sending event %s", this, ex);
-            ex.printStackTrace(System.err);
-          }
+          try {
+            if (debug) {
+              printError("%s.append: sending riemann event: %s", className, rEvent);
+            }
+            send(rEvent);
+            if (debug) {
+              printError("%s.append(logEvent): sent to riemann %s:%s", className, riemannHostname, riemannPort);
+            }
+          } catch (Exception ex) {
+            if (debug) {
+              printError("%s: Error sending event %s", this, ex);
+              ex.printStackTrace(System.err);
+            }
 
-          riemannClient.reconnect();
-          rEvent.send();
-        }
+            riemannClient.reconnect();
+            send(rEvent);
+            }
       } catch (Exception ex) {
         // do nothing
-        if (debug) {
           printError("%s.append: Error during append(): %s", className, ex);
-          ex.printStackTrace(System.err);
-        }
+          if (debug) {
+              ex.printStackTrace(System.err);
+          }
       }
     }
   }
