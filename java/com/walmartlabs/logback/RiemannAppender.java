@@ -169,10 +169,10 @@ public class RiemannAppender<E> extends AppenderBase<E> {
             }
       } catch (Exception ex) {
         // do nothing
-        if (debug) {
           printError("%s.append: Error during append(): %s", className, ex);
-          ex.printStackTrace(System.err);
-        }
+          if (debug) {
+              ex.printStackTrace(System.err);
+          }
       }
     }
   }
