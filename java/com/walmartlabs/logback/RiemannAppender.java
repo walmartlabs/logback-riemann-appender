@@ -30,11 +30,6 @@ public class RiemannAppender<E> extends AppenderBase<E> {
   private Map<String, String> customAttributes = new HashMap<String, String>();
   private boolean tcp = false;
 
-  /**
-   * The maximum number of attempts to send a message to the Riemann server.
-   */
-  private final static int MAX_ATTEMPTS = 2;
-
   public static AtomicLong timesCalled = new AtomicLong(0);
 
   private static boolean debug = false;
@@ -134,12 +129,16 @@ public class RiemannAppender<E> extends AppenderBase<E> {
   }
 
   /**
-   * When appending a Logback event, this code will attempt to send an event to the Riemann service.
-   * We give it MAX_ATTEMPTS tries; currently that's hard-coded to 2 attempts.  On attempts after the first,
-   * we start with a reconnect of the Riemann client.
-   *
-   * An attempt is only succesful if the acknowledgement message from Rienmann is ok.
+   * Sends the event and waits for the ack. If not ok, throws an IOException with the server-reported error.
    */
+  private final void send(EventDSL event) throws IOException {
+    Proto.Msg msg = event.send().deref();
+
+    if (!msg.getOk()) {
+      throw new IOException(msg.getError());
+    }
+  }
+
   protected synchronized void append(E event) {
     timesCalled.incrementAndGet();
     ILoggingEvent logEvent = (ILoggingEvent) event;
@@ -150,49 +149,28 @@ public class RiemannAppender<E> extends AppenderBase<E> {
 
     if (isMinimumLevel(logEvent)) {
       EventDSL rEvent = createRiemannEvent(logEvent);
-
-      if (debug) {
-        printError("%s.append: sending riemann event: %s", className, rEvent);
-      }
-
       try {
-
-        int attempt = 0;
-        while (true) {
           try {
-            if (++attempt > 1) {
-              riemannClient.reconnect();
+            if (debug) {
+              printError("%s.append: sending riemann event: %s", className, rEvent);
             }
-
-            Proto.Msg ack = rEvent.send().deref();
-
-            if (!ack.getOk()) {
-              throw new IOException("Error from Riemann server: " + ack.getError());
-            }
-
+            send(rEvent);
             if (debug) {
               printError("%s.append(logEvent): sent to riemann %s:%s", className, riemannHostname, riemannPort);
             }
-
-            // Ok to break out of the retry loop once successful.
-            break;
-
           } catch (Exception ex) {
             if (debug) {
               printError("%s: Error sending event %s", this, ex);
+              ex.printStackTrace(System.err);
             }
 
-            if (attempt < MAX_ATTEMPTS) {
-              continue;
+            riemannClient.reconnect();
+            send(rEvent);
             }
-
-            throw new IOException(ex.getMessage(), ex);
-          }
-        } // retry loop
-      } catch (IOException ex) {
-        // Failure after retries exhausted:
-        printError("%s.append: Error during append(): %s", className, ex);
+      } catch (Exception ex) {
+        // do nothing
         if (debug) {
+          printError("%s.append: Error during append(): %s", className, ex);
           ex.printStackTrace(System.err);
         }
       }
