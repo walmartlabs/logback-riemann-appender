@@ -1,5 +1,10 @@
 # Release Notes
 
+## v0.3.0 - January 20th, 2017
+
+- [#7](https://github.com/walmartlabs/logback-riemann-appender/pull/7) - Update dependencies, wait on ack from Riemann server ([@hlship](https://github.com/hlship))
+- [4a92c8b](https://github.com/walmartlabs/logback-riemann-appender/commit/4a92c8bee0f9eeb60be0116ad8c88db493543a02) - Incorporate the contents of CHANGES.md into release-notes.md (Dante Briones)
+
 ## v0.2.0 - July 21st, 2016
 
 - [#2](https://github.com/walmartlabs/logback-riemann-appender/pull/2) - Allow configuration via system property ([@dbriones](https://github.com/dbriones))
